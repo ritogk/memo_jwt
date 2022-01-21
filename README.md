@@ -1,3 +1,4 @@
+# シェルスクリプト
 ```
 # JWT
 TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvYXV0aFwvYWRtaW5cL2xvZ2luIiwiaWF0IjoxNjQyNzQ1MTI4LCJleHAiOjE2NDI3NDg3MjgsIm5iZiI6MTY0Mjc0NTEyOCwianRpIjoiaTZaWERLOFZqbzU0bG1OaCIsInN1YiI6MSwicHJ2Ijp0cnVlfQ.VjBGimYRV8XUnSNVLiCeSX2TdnDcRkp0L306-qp7DJ8
@@ -30,7 +31,8 @@ echo $SIGNATURE
 
 ```
 
-https://zenn.dev/mfykmn/articles/eeaeb9a05130b8
-https://tech-lab.sios.jp/archives/7576
-https://jwt.io/
-https://architecting.hateblo.jp/entry/2020/03/27/130535
+# 参考
+https://zenn.dev/mfykmn/articles/eeaeb9a05130b8<br>
+https://tech-lab.sios.jp/archives/7576<br>
+https://jwt.io/<br>
+https://architecting.hateblo.jp/entry/2020/03/27/130535<br>
