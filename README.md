@@ -1,5 +1,10 @@
-# JWTを解析した時のメモ
-## シェルスクリプト
+# JWT memo
+
+## JWTとは
+電子署名付きのjsonの事。<br>
+認証フロー(OAuth、Bearer等)で使われるデータ方式であって、認証方式ではない。
+
+## JWTを解析した時のメモ
 ```
 # JWT
 TOKEN=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwOlwvXC9sb2NhbGhvc3RcL2FwaVwvYXV0aFwvYWRtaW5cL2xvZ2luIiwiaWF0IjoxNjQyNzQ1MTI4LCJleHAiOjE2NDI3NDg3MjgsIm5iZiI6MTY0Mjc0NTEyOCwianRpIjoiaTZaWERLOFZqbzU0bG1OaCIsInN1YiI6MSwicHJ2Ijp0cnVlfQ.VjBGimYRV8XUnSNVLiCeSX2TdnDcRkp0L306-qp7DJ8
