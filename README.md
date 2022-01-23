@@ -14,7 +14,7 @@ OAuth認証方式の中一部。<br>
 認証フロー(OAuth、Bearer等)で使われるデータ方式であって認証方式ではない。
 
 ## 認可サーバーとリソースサーバーを混ぜた時の構成図
-<img src="https://user-images.githubusercontent.com/72111956/150701224-c13e09e0-262a-4c3e-850a-a901b214b25d.jpg">
+<img src="https://user-images.githubusercontent.com/72111956/150701324-cad6eab1-04a9-4e4e-8048-fc2e04a853fd.jpg">
 
 ## JWTを解析した時のメモ
 ```
