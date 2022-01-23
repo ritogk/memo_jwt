@@ -1,4 +1,4 @@
-# JWT memo
+# JWTのメモ
 
 ## JWTとは
 電子署名付きのjsonの事。<br>
