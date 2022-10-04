@@ -1,0 +1,40 @@
+<html>
+  <head> </head>
+  <body>
+    内容はないよう。 開発者ツールのネットワークを見てね。
+  </body>
+</html>
+
+<script>
+  // localhost or ipだと何故かクッキー送信できないのでhostでフォワーディングする事
+  serverOrigin = "http://server.test.com:3000"
+  clinetOrigin = "https://9ad7-2400-2651-47e0-e000-7987-8bd9-60c6-1937.jp.ngrok.io"
+
+  const code = getParam("code", window.location.href)
+  if(code){
+    // ■GET
+    fetch(clinetOrigin + "/fetch-token?code=" + encodeURIComponent(code))
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success fetch-token:", data)
+      fetch(clinetOrigin + "/get-user-info?token=" + data.token)
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Success get-user-info:", data)
+      })
+    })
+    .catch((error) => {
+      console.error("Error:", error)
+    })
+  }
+
+  function getParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+</script>
