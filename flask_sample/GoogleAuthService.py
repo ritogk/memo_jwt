@@ -6,7 +6,7 @@ from requests_oauthlib import OAuth2Session
 class GoogleAuthService:
   GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
   GOOGLE_CLIENT_SECRET = "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"
-  REDIRECT_URI = "https://9ad7-2400-2651-47e0-e000-7987-8bd9-60c6-1937.jp.ngrok.io"
+  REDIRECT_URI = "https://5b12-180-33-113-176.jp.ngrok.io"
   OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
   TOKEN_URL = "https://oauth2.googleapis.com/token"
   USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
