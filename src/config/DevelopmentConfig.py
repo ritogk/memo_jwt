@@ -9,6 +9,7 @@ class DevelopmentConfig:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + databese_file
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
+    TEMPLATES_AUTO_RELOAD = True
 
 
 Config = DevelopmentConfig
