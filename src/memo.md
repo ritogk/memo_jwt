@@ -19,3 +19,6 @@ flask db upgrade
 
 ## migrate系はここみたよ～
 https://qiita.com/niwaka_dev/items/6e3d9ff6d797243c77c3
+
+# migrate初期化
+FLASK_APP=app.py flask db init

@@ -9,6 +9,7 @@ def create_app():
     app = Flask(__name__)
     # db関係の設定
     db.init_db(app)
+    db.init_seeder(app)
     # ルーティングの設定
     app.register_blueprint(routes)
     return app
