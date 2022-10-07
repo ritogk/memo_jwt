@@ -1,4 +1,5 @@
-# flask memo
+# flask 起動
+./run.sh
 
 ## pipの一括インストール
 pip install -r requirements.txt
@@ -15,3 +16,6 @@ flask db downgrade # ロールバック
 ## モデルを修正したら実行するコマンド
 flask db migrate
 flask db upgrade
+
+## migrate系はここみたよ～
+https://qiita.com/niwaka_dev/items/6e3d9ff6d797243c77c3
