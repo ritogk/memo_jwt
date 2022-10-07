@@ -1,1 +1,1 @@
-FLACK_APP=app.py flask run -h 0.0.0.0 -p 1100
+FLACK_APP=app.py flask run -h 0.0.0.0 -p 1100 --reload --debugger

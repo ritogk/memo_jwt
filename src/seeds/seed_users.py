@@ -13,7 +13,6 @@ class UserSeeder(Seeder):
 
     # run() will be called by Flask-Seeder
     def run(self):
-        print(1)
         # Create a new Faker and tell it how to create User objects
         faker = Faker(
             cls=User,
