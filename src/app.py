@@ -1,5 +1,6 @@
 from flask import Flask
-from routes import routes
+from routes.api import api
+from routes.view import view
 import db.models.all
 import db.db as db
 
@@ -11,7 +12,8 @@ def create_app():
     db.init_db(app)
     db.init_seeder(app)
     # ルーティングの設定
-    app.register_blueprint(routes)
+    app.register_blueprint(view)
+    app.register_blueprint(api)
     return app
 
 app = create_app()
