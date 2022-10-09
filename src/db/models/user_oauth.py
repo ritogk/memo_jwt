@@ -3,7 +3,7 @@ from db.db import db
 
 class UserOauth(db.Model):
 
-    __tablename__ = 'users_oauths'
+    __tablename__ = 'user_oauths'
 
     id = db.Column(db.Integer, primary_key=True)
     users_id = db.Column(db.Integer, db.ForeignKey('users.id'))

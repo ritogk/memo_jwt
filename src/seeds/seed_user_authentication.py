@@ -1,9 +1,10 @@
 from flask_seeder import Seeder, Faker, generator
 import sys
 sys.path.append('../')
-from db.models.all import User
+from db.models.all import UserAuthentication
+import hashlib
 
-class UserSeeder(Seeder):
+class UserAuthenticationSeeder(Seeder):
 
     # Refer: https://pypi.org/project/Flask-Seeder/
     # Lower priority will be run first. All seeders with the same priority are then ordered by class name.
@@ -15,17 +16,17 @@ class UserSeeder(Seeder):
     def run(self):
         # Create a new Faker and tell it how to create User objects
         faker = Faker(
-            cls=User,
+            cls=UserAuthentication,
             init={
                 "id": None,
-                "name": generator.String('[a-z]\d{4}\c{3}'),
+                "username": 'test',
+                "password": hashlib.sha256('test'.encode()).hexdigest(),
                 "created_at": None,
                 "updated_at": None,
             }
         )
 
-        # Create 3 users
-        for user in faker.create(3):
-            print("Adding user: %s" % user)
-            # Flask-Seeder will by default commit all changes to the database.
-            self.db.session.add(user)
+        # Create 1
+        for user_authentication in faker.create(1):
+            print("Adding user_authentication: %s" % user_authentication)
+            self.db.session.add(user_authentication)

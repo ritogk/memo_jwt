@@ -19,13 +19,14 @@ class UserSeeder(Seeder):
             init={
                 "id": None,
                 "name": generator.String('[a-z]\d{4}\c{3}'),
+                "email": 'homing0321r4cfw@yahoo.co.jp',
                 "created_at": None,
                 "updated_at": None,
             }
         )
 
-        # Create 3 users
-        for user in faker.create(3):
+        # Create 1 users
+        for user in faker.create(1):
             print("Adding user: %s" % user)
             # Flask-Seeder will by default commit all changes to the database.
             self.db.session.add(user)
