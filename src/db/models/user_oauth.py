@@ -1,9 +1,9 @@
 from datetime import datetime
 from db.db import db
 
-class UserOauthToken(db.Model):
+class UserOauth(db.Model):
 
-    __tablename__ = 'users_oauth_token'
+    __tablename__ = 'users_oauths'
 
     id = db.Column(db.Integer, primary_key=True)
     users_id = db.Column(db.Integer, db.ForeignKey('users.id'))
