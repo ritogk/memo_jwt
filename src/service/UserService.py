@@ -1,3 +1,4 @@
+from flask import current_app
 import os
 import requests
 from typing import Optional
@@ -8,7 +9,7 @@ import hashlib
 
 class UserService:
   def create_user(self, name: str, email: str, username: str, password: str) -> User:
-      password_hash = hashlib.sha256(password.encode()).hexdigest()
+      password_hash = hashlib.sha256((password + current_app.config['USER_PASSWORD_SALT']).encode()).hexdigest()
       if(db.session.query(db.exists().where(UserAuthentication.username == username).where(UserAuthentication.password == password_hash)).scalar()):
         return '存在してます。'
       else:
@@ -24,7 +25,7 @@ class UserService:
         return user
       
   def login(self, username: str, password: str) -> User:
-      password_hash = hashlib.sha256(password.encode()).hexdigest()
+      password_hash = hashlib.sha256((password + current_app.config['USER_PASSWORD_SALT']).encode()).hexdigest()
       user_authentication = db.session.query(UserAuthentication).filter_by(username = username,
                                                                             password = password_hash).first()
       if not user_authentication:

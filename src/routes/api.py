@@ -19,11 +19,10 @@ api = Blueprint("api", __name__)
 def users():
     return user_controller.create()
 
+# ログイン
 @api.route('/users/login', methods=['POST'])
 def users_login():
     return user_controller.login()
-
-
 
 # ユーザー登録(oauth)
 @api.route('/users/oauth/twitter', methods=['POST'])

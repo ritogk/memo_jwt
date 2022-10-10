@@ -10,6 +10,7 @@ class DevelopmentConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
     TEMPLATES_AUTO_RELOAD = True
+    USER_PASSWORD_SALT = 'flask_app_user_salt'
     JWT_SECRET = 'secret_key_test'
 
 Config = DevelopmentConfig

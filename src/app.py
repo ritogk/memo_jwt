@@ -17,6 +17,7 @@ def create_app():
     app.register_blueprint(api)
     # その他
     app.config['JWT_SECRET'] = DevelopmentConfig.JWT_SECRET
+    app.config['USER_PASSWORD_SALT'] = DevelopmentConfig.USER_PASSWORD_SALT
     return app
 
 app = create_app()
