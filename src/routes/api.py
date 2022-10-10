@@ -1,6 +1,9 @@
 from flask import jsonify, render_template, make_response, request, Blueprint
 from controllers.authentication_controller.authentication_controller import AuthenticationController
 
+from controllers.user_controller import UserController
+user_controller = UserController()
+
 from service.TwitterAuthService import TwitterAuthService
 twitter_auth_service = TwitterAuthService()
 
@@ -8,9 +11,9 @@ authentication_controller = AuthenticationController()
 
 api = Blueprint("api", __name__)
 
-@api.route('/test', methods=['POST'])
-def test():
-    return authentication_controller.post_login()
+@api.route('/users', methods=['POST'])
+def users():
+    return user_controller.create()
 
 # 認証画面を表示するためのURLを取得する 
 @api.route('/twitter/authorization-url', methods=['GET'])

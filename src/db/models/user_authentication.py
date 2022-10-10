@@ -13,8 +13,7 @@ class UserAuthentication(db.Model):
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.now)
     updated_at = db.Column(db.DateTime, nullable=False, default=datetime.now, onupdate=datetime.now)
     
-    def __init__(self, id, username, password, created_at=None, updated_at=None):
-        self.id = id
+    def __init__(self, username, password, created_at=None, updated_at=None):
         self.username = username
         self.password = password
         self.created_at = created_at
