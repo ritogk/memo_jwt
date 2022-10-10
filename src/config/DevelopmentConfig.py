@@ -10,6 +10,6 @@ class DevelopmentConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
     TEMPLATES_AUTO_RELOAD = True
-
+    JWT_SECRET = 'secret_key_test'
 
 Config = DevelopmentConfig

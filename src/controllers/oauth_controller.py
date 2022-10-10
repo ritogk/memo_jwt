@@ -1,5 +1,5 @@
 from os import access
-from flask import request, redirect, jsonify, url_for, make_response
+from flask import request, redirect, jsonify, url_for, make_response, current_app
 from controllers.authentication_controller.forms import UserLoginForm
 from db.db import db
 from db.models.all import User
@@ -30,7 +30,7 @@ class OAuthController:
         # ユーザー登録
         user = user_service.create_oauth_user('twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), access_token, refresh_token)
         # jwt生成
-        key = "secret"
+        key = current_app.config['JWT_SECRET']
         content = {}
         content["id"] = user.id
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
@@ -64,7 +64,8 @@ class OAuthController:
         # ユーザー登録
         user = user_service.create_oauth_user('google', google_user['name'], google_user['email'], access_token, refresh_token)
         # jwt生成
-        key = "secret"
+        key = current_app.config['JWT_SECRET']
+        print(key)
         content = {}
         content["id"] = user.id
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')

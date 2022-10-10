@@ -19,6 +19,10 @@ api = Blueprint("api", __name__)
 def users():
     return user_controller.create()
 
+@api.route('/users/login', methods=['POST'])
+def users_login():
+    return user_controller.login()
+
 
 
 # ユーザー登録(oauth)
@@ -31,18 +35,17 @@ def users_oauth():
 def oauth_twitter_url():
     return oauth_controller.oauth_twitter_url()
 
+# twitterのoauth2認可後の処理
 @api.route('/oauth/twitter/callback', methods=['GET'])
 def oauth_redirect():
     return oauth_controller.create_twitter_user()
 
-
-
-
-
+# googleの認証画面のurlを取得
 @api.route('/oauth/google/url', methods=['GET'])
 def oauth_google_url():
     return oauth_controller.oauth_google_url()
 
+# googleのoauth2認可後の処理
 @api.route('/oauth/google/callback', methods=['GET'])
 def oauth_google_callback():
     return oauth_controller.create_google_user()

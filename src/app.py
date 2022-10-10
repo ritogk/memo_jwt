@@ -3,6 +3,7 @@ from routes.api import api
 from routes.view import view
 import db.models.all
 import db.db as db
+from config.DevelopmentConfig import DevelopmentConfig
 
 # webアプリケーション作成
 def create_app():
@@ -14,6 +15,8 @@ def create_app():
     # ルーティングの設定
     app.register_blueprint(view)
     app.register_blueprint(api)
+    # その他
+    app.config['JWT_SECRET'] = DevelopmentConfig.JWT_SECRET
     return app
 
 app = create_app()
