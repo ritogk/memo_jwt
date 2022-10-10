@@ -22,13 +22,15 @@ class UserService:
         db.session.commit()
         return user
       
-  def create_oauth_user(self, name: str, email: str, access_token:str, refresh_token: str) -> User:
+  def create_oauth_user(self, provider: str, name: str, email: str, access_token:str, refresh_token: str) -> User:
       if(db.session.query(db.exists().where(UserOauth.access_token == access_token).where(UserOauth.refresh_token == refresh_token)).scalar()):
         return '存在してます。'
       else:
         user = User(name, email)
         db.session.add(user)
-        user_oauth = UserOauth(access_token, refresh_token)
+        db.session.flush()
+        print(user.id)
+        user_oauth = UserOauth(user.id, provider, access_token, refresh_token)
         db.session.add(user_oauth)
         db.session.commit()
         return user  

@@ -2,11 +2,12 @@ import os
 import requests
 from typing import Optional
 from requests_oauthlib import OAuth2Session
+from typing import Tuple
 
 class GoogleAuthService:
   GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
   GOOGLE_CLIENT_SECRET = "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"
-  REDIRECT_URI = "https://7c3b-2400-2200-3eb-e896-a949-dc1f-fcc6-3f90.jp.ngrok.io"
+  REDIRECT_URI = "https://deea-2400-2200-622-b4b8-bd19-a8db-794c-f201.jp.ngrok.io/oauth/google/callback"
   OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
   TOKEN_URL = "https://oauth2.googleapis.com/token"
   USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -22,17 +23,22 @@ class GoogleAuthService:
       #   state = encoded.decode("utf-8")
       #   redirect_url, _ = self._client().authorization_url(self.OAUTH_URL, state=state)
 
-      redirect_url, _ = self._client().authorization_url(self.OAUTH_URL)
+      redirect_url, _ = self._client().authorization_url(
+          self.OAUTH_URL,
+          access_type="offline",
+          prompt="consent"
+        )
       return redirect_url
 
-  def fetch_token(self, code: str) -> str:
+  def fetch_token(self, code: str) -> Tuple[str, str]:
       # Googleからリダイレクトして来たときにURLに付与されている code を使って token を取得する
       token = self._client().fetch_token(
           self.TOKEN_URL,
           client_secret=self.GOOGLE_CLIENT_SECRET,
           code=code,
       )
-      return token["access_token"]
+      print(token)
+      return token["access_token"], token["refresh_token"], 
 
   def get_user_info(self, access_token: str) -> Optional[dict]:
       # access_token を使って、ユーザ情報を取得する

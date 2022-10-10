@@ -6,7 +6,7 @@ class UserAuthentication(db.Model):
     __tablename__ = 'user_authentications'
 
     id = db.Column(db.Integer, primary_key=True)
-    users_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     user = db.relationship("User")
     username = db.Column(db.String(16), index=True, unique=True)
     password = db.Column(db.String(128))

@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 68915360a55b
+Revision ID: 4270964c0fa5
 Revises: 
-Create Date: 2022-10-09 13:32:10.347610
+Create Date: 2022-10-10 15:16:33.911633
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '68915360a55b'
+revision = '4270964c0fa5'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,23 +29,24 @@ def upgrade():
     )
     op.create_table('user_authentications',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('users_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('username', sa.String(length=16), nullable=True),
     sa.Column('password', sa.String(length=128), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['users_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_user_authentications_username'), 'user_authentications', ['username'], unique=True)
     op.create_table('user_oauths',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('users_id', sa.Integer(), nullable=True),
+    sa.Column('user_id', sa.Integer(), nullable=True),
+    sa.Column('provider', sa.String(length=200), nullable=False),
     sa.Column('access_token', sa.String(length=1000), nullable=True),
     sa.Column('refresh_token', sa.String(length=1000), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
-    sa.ForeignKeyConstraint(['users_id'], ['users.id'], ),
+    sa.ForeignKeyConstraint(['user_id'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     # ### end Alembic commands ###

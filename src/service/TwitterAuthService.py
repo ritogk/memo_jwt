@@ -8,7 +8,7 @@ from typing import Tuple
 class TwitterAuthService:
   TWITTER_CLIENT_ID = "U1pKWk5Ka21IS2I0VjF5VWRBcWc6MTpjaQ"
   TWITTER_CLIENT_SECRET = "yNLv_m_xUvH24H6lnm7-u9_ALEao8bzne3t4Py9dSxklje3It4"
-  REDIRECT_URI = "https://893a-2400-2651-47e0-e000-6945-282e-5edc-8104.jp.ngrok.io/oauth/twitter/callback"
+  REDIRECT_URI = "https://deea-2400-2200-622-b4b8-bd19-a8db-794c-f201.jp.ngrok.io/oauth/twitter/callback"
   OAUTH_URL = "https://twitter.com/i/oauth2/authorize"
   TOKEN_URL = "https://api.twitter.com/2/oauth2/token"
   USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"

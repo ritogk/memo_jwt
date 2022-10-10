@@ -19,10 +19,12 @@ api = Blueprint("api", __name__)
 def users():
     return user_controller.create()
 
+
+
 # ユーザー登録(oauth)
 @api.route('/users/oauth/twitter', methods=['POST'])
 def users_oauth():
-    return user_controller.create_oauth()
+    return oauth_controller.create_twitter_user()
 
 # twitterの認証画面のurlを取得
 @api.route('/oauth/twitter/url', methods=['GET'])
@@ -31,8 +33,19 @@ def oauth_twitter_url():
 
 @api.route('/oauth/twitter/callback', methods=['GET'])
 def oauth_redirect():
-    return render_template('twitter_oauth_callback.html')
+    return oauth_controller.create_twitter_user()
 
+
+
+
+
+@api.route('/oauth/google/url', methods=['GET'])
+def oauth_google_url():
+    return oauth_controller.oauth_google_url()
+
+@api.route('/oauth/google/callback', methods=['GET'])
+def oauth_google_callback():
+    return oauth_controller.create_google_user()
 
 # 認証画面からリダイレクト時に返却されたcodeを使いaccess_tokenを取得する
 @api.route('/twitter/fetch-token', methods=['GET'])
