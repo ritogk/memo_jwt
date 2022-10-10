@@ -2,7 +2,7 @@ import os
 import requests
 from typing import Optional
 from requests_oauthlib import OAuth2Session
-from db.models.all import User, UserAuthentication
+from db.models.all import User, UserAuthentication, UserOauth
 from db.db import db
 import hashlib
 
@@ -22,3 +22,13 @@ class UserService:
         db.session.commit()
         return user
       
+  def create_oauth_user(self, name: str, email: str, access_token:str, refresh_token: str) -> User:
+      if(db.session.query(db.exists().where(UserOauth.access_token == access_token).where(UserOauth.refresh_token == refresh_token)).scalar()):
+        return '存在してます。'
+      else:
+        user = User(name, email)
+        db.session.add(user)
+        user_oauth = UserOauth(access_token, refresh_token)
+        db.session.add(user_oauth)
+        db.session.commit()
+        return user  

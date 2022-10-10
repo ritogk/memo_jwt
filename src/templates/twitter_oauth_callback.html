@@ -1,0 +1,44 @@
+<html>
+  <head> </head>
+  <body>
+    twitter oauth コールバック用
+  </body>
+</html>
+
+<script >
+  // localhost or ipだと何故かクッキー送信できないのでhostでフォワーディングする事
+  serverOrigin = "http://server.test.com:3000"
+  clinetOrigin = "https://893a-2400-2651-47e0-e000-6945-282e-5edc-8104.jp.ngrok.io/"
+
+  const code = getParam("code", window.location.href)
+  debugger
+  if(code){
+    const data = {code:code};
+    const param  = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    };
+
+    // paramを付ける以外はGETと同じ
+    fetch(clinetOrigin + "users/oauth/twitter", param)
+      .then((res)=>{
+        return( res.json() );
+      })
+      .then((data)=>{
+        console.log('owata');
+      });
+  }
+
+  function getParam(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
+}
+</script>

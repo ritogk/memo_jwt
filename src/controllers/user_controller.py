@@ -1,3 +1,4 @@
+from os import access
 from flask import request, redirect, jsonify, url_for, make_response
 from controllers.authentication_controller.forms import UserLoginForm
 from db.db import db
@@ -5,9 +6,13 @@ from db.models.all import User
 import jwt
 from service.UserService import UserService
 user_service = UserService()
+import random
+
+from service.TwitterAuthService import TwitterAuthService
+twitter_auth_service = TwitterAuthService()
 
 class UserController:
-    # 新規登録
+    # ユーザーの新規登録(password認証)
     def create(self):
         name = request.json["name"]
         email = request.json["email"]
@@ -39,9 +44,25 @@ class UserController:
                         domain=server_domain, path='/')
         return response
         
-
-    # ログアウト
-    def get_logout(self):
-        pass
-        # authenticate_service.logout()
-        # return redirect(url_for('routes.get_index'))
+    # ユーザーの新規登録(oauth認証)
+    def create_oauth(self):
+        code = request.json["code"]
+        # codeからアクセストークンを取得
+        access_token, refresh_token = twitter_auth_service.fetch_token(code)
+        # twitterからユーザー情報取得
+        twitter_user = twitter_auth_service.get_user_info(access_token)
+        # ユーザー登録
+        user = user_service.create_oauth_user(twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), access_token, refresh_token)
+        response = make_response({
+            'id': user.id,
+            'name': user.name,
+            'email': user.email
+        })
+        response.headers.set('Content-Type', 'application/json')
+        response.headers.add('X-Content-Type-Options', 'nosniff')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+        
+        
+        
+        

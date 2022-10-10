@@ -9,16 +9,30 @@ twitter_auth_service = TwitterAuthService()
 
 authentication_controller = AuthenticationController()
 
+from controllers.oauth_controller import OAuthController
+oauth_controller = OAuthController()
+
 api = Blueprint("api", __name__)
 
+# ユーザー登録
 @api.route('/users', methods=['POST'])
 def users():
     return user_controller.create()
 
-# 認証画面を表示するためのURLを取得する 
-@api.route('/twitter/authorization-url', methods=['GET'])
-def twitter_authorization_url():
-    return twitter_auth_service.get_authorization_url()
+# ユーザー登録(oauth)
+@api.route('/users/oauth/twitter', methods=['POST'])
+def users_oauth():
+    return user_controller.create_oauth()
+
+# twitterの認証画面のurlを取得
+@api.route('/oauth/twitter/url', methods=['GET'])
+def oauth_twitter_url():
+    return oauth_controller.oauth_twitter_url()
+
+@api.route('/oauth/twitter/callback', methods=['GET'])
+def oauth_redirect():
+    return render_template('twitter_oauth_callback.html')
+
 
 # 認証画面からリダイレクト時に返却されたcodeを使いaccess_tokenを取得する
 @api.route('/twitter/fetch-token', methods=['GET'])
