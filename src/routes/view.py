@@ -7,7 +7,7 @@ view = Blueprint("view", __name__)
 
 @view.route('/', methods=['GET'])
 def hello():
-    return render_template('hello.html')
+    return render_template('work.html')
 
 
 @view.route('/oauth/callback', methods=['GET'])

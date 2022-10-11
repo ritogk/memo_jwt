@@ -71,3 +71,14 @@ class UserController:
                             httponly=True, samesite=None,
                             domain=server_domain, path='/')
         return response
+
+    # ログアウト
+    def logout(self):
+        response = make_response({
+            'success': True})
+        response.headers.set('Content-Type', 'application/json')
+        response.headers.add('X-Content-Type-Options', 'nosniff')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        response.delete_cookie(
+            "token", domain=current_app.config['SERVER_DOMAIN'])
+        return response

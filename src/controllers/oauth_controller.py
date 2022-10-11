@@ -51,7 +51,7 @@ class OAuthController:
         # jwt生成
         key = current_app.config['JWT_SECRET']
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = 'server.test.com'
+        server_domain = current_app.config['SERVER_DOMAIN']
 
         response = make_response({
             'id': content["id"]
@@ -85,7 +85,7 @@ class OAuthController:
         # jwt生成
         key = current_app.config['JWT_SECRET']
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = 'server.test.com'
+        server_domain = current_app.config['SERVER_DOMAIN']
 
         response = make_response({
             'id': content["id"]
@@ -132,7 +132,7 @@ class OAuthController:
         print(key)
         # content = {}
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = 'server.test.com'
+        server_domain = current_app.config['SERVER_DOMAIN']
 
         response = make_response({
             'id': user.id,
@@ -168,7 +168,7 @@ class OAuthController:
         key = current_app.config['JWT_SECRET']
         print(key)
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = 'server.test.com'
+        server_domain = current_app.config['SERVER_DOMAIN']
 
         response = make_response({
             'id': content["id"]

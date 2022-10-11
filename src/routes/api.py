@@ -17,6 +17,12 @@ def users():
     return user_controller.create()
 
 
+@api.route('/users/logout', methods=['POST'])
+# ログアウト
+def users_logout():
+    return user_controller.logout()
+
+
 @api.route('/users/login', methods=['POST'])
 # ログイン(password)
 def users_login():
@@ -30,7 +36,7 @@ def users_oauth_twitter():
 
 
 @api.route('/users/oauth/twitter/login', methods=['POST'])
-# ユーザーログイン(twitter)
+# ログイン(twitter)
 def users_oauth_twitter_login():
     return oauth_controller.users_oauth_twitter_login()
 

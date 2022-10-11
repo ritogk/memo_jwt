@@ -6,6 +6,8 @@ import db.db as db
 from config.DevelopmentConfig import DevelopmentConfig
 
 # webアプリケーション作成
+
+
 def create_app():
     # Generate Flask App Instance
     app = Flask(__name__)
@@ -18,7 +20,9 @@ def create_app():
     # その他
     app.config['JWT_SECRET'] = DevelopmentConfig.JWT_SECRET
     app.config['USER_PASSWORD_SALT'] = DevelopmentConfig.USER_PASSWORD_SALT
-    app.config['SERVER_BASE_URL'] =DevelopmentConfig.SERVER_BASE_URL
+    app.config['SERVER_BASE_URL'] = DevelopmentConfig.SERVER_BASE_URL
+    app.config['SERVER_DOMAIN'] = DevelopmentConfig.SERVER_DOMAIN
     return app
+
 
 app = create_app()

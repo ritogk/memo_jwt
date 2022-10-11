@@ -9,9 +9,30 @@
   <br>
   <button id="button-google-create">oauth google create</button>
   <button id="button-google-login">oauth google login</button>
+  <br>
+  <button id="button-logout">logout</button>
 </html>
 
 <script>
+  // logout
+  document.getElementById("button-logout").onclick = function() {
+    const data = {};
+    const param  = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    };
+    fetch(clinetOrigin + '/users/logout', param)
+    .then((res)=>{
+      return( res.json() );
+    })
+    .then((data)=>{
+      console.log('logout owata');
+    });
+  };
+
   // twitter 新規登録
   document.getElementById("button-twitter-create").onclick = function() {
     localStorage.setItem("OAUTH_PROVIDER", 'twitter')
