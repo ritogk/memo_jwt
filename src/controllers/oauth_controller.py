@@ -1,3 +1,4 @@
+from calendar import c
 from flask import current_app
 import random
 from service.GoogleAuthService import GoogleAuthService
@@ -5,7 +6,7 @@ from service.TwitterAuthService import TwitterAuthService
 from flask import request, redirect, jsonify, url_for, make_response, current_app
 from service.response.response_authentication_token import response_authentication_token
 from service.response.base_response import base_response
-import jwt
+from service.JwtService import JwtService
 from service.UserService import UserService
 user_service = UserService()
 
@@ -34,18 +35,17 @@ class OAuthController:
         # twitterからユーザー情報取得
         twitter_user = twitter_auth_service.get_user_info(access_token)
 
-        content = {}
         # ユーザー登録
         user = user_service.create_oauth_user(
             'twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), twitter_user['data']['id'])
-        content["id"] = user.id
-        content["name"] = user.name
 
         # jwt生成
-        key = current_app.config['JWT_SECRET']
-        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = current_app.config['SERVER_DOMAIN']
+        content = {}
+        content["id"] = user.id
+        content["name"] = user.name
+        token = JwtService.generate_jwt(content)
 
+        # respnse生成
         body = {
             'id': content["id"]
         }
@@ -63,17 +63,17 @@ class OAuthController:
         # twitterからユーザー情報取得
         twitter_user = twitter_auth_service.get_user_info(access_token)
 
-        content = {}
         oauth_user = user_service.get_oauth_user(
             'twitter', twitter_user['data']['id'])
-        # ログイン
+        if (oauth_user == None):
+            return 'errorです。'
+        # jwt生成
+        content = {}
         content["id"] = oauth_user.id
         content["name"] = oauth_user.name
+        token = JwtService.generate_jwt(content)
 
-        # jwt生成
-        key = current_app.config['JWT_SECRET']
-        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-
+        # response生成
         body = {
             'id': content["id"]
         }
@@ -100,19 +100,16 @@ class OAuthController:
         google_user = google_auth_service.get_user_info(access_token)
         print(google_user)
 
-        content = {}
-        content["id"] = google_user['id']
         # ユーザー登録
         user = user_service.create_oauth_user(
             'google', google_user['name'], google_user['email'], google_user['id'])
 
         # jwt生成
-        key = current_app.config['JWT_SECRET']
-        print(key)
-        # content = {}
-        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = current_app.config['SERVER_DOMAIN']
+        content = {}
+        content["id"] = google_user['id']
+        token = JwtService.generate_jwt(content)
 
+        # response生成
         body = {
             'id': user.id,
             'name': user.name,
@@ -133,17 +130,14 @@ class OAuthController:
         google_user = google_auth_service.get_user_info(access_token)
         print(google_user)
 
-        content = {}
         oauth_user = user_service.get_oauth_user('google', google_user['id'])
-        # ログイン
-        content["id"] = oauth_user.id
 
         # jwt生成
-        key = current_app.config['JWT_SECRET']
-        print(key)
-        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = current_app.config['SERVER_DOMAIN']
+        content = {}
+        content["id"] = oauth_user.id
+        token = JwtService.generate_jwt(content)
 
+        # response生成
         body = {
             'id': content["id"]
         }

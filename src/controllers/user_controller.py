@@ -1,11 +1,5 @@
-import random
-from os import access
-from flask import request, redirect, jsonify, url_for, make_response, current_app
-from controllers.authentication_controller.forms import UserLoginForm
-from db.db import db
-from db.models.all import User
-import jwt
-from datetime import datetime
+from service.JwtService import JwtService
+from flask import request, current_app
 from service.response.response_authentication_token import response_authentication_token
 from service.response.base_response import base_response
 from service.UserService import UserService
@@ -22,10 +16,9 @@ class UserController:
         user = user_service.create_user(name, email, username, password)
 
         # jwt生成
-        key = current_app.config['JWT_SECRET']
         content = {}
         content["id"] = user.id
-        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
+        token = JwtService.generate_jwt(content)
         body = {
             'id': user.id,
             'name': user.name,
@@ -41,10 +34,9 @@ class UserController:
         user = user_service.login(username, password)
 
         # jwt生成
-        key = current_app.config['JWT_SECRET']
         content = {}
         content["id"] = user.id
-        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
+        token = JwtService.generate_jwt(content)
         data = {
             'id': user.id,
             'name': user.name,
