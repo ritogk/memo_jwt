@@ -17,4 +17,7 @@ twitter側に申請しないと取得できないっぽ(めんどいからして
 ## google oauth2
 何度もoauth2を使うととレスポンスが返ってこなくなる・・・  
 簡単に本名とメールアドレスが取得できて良い！  
-facebookも似たような感じらしい。  
+facebookも似たような感じらしい。
+
+# 実装メモ
+https://reflective-gallon-3d7.notion.site/oauth-408bb21fd9ed45328a295d7d6ce9a9e1
