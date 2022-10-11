@@ -1,29 +1,34 @@
 <html>
   <head> </head>
   <body>
-    内容はないよう。 開発者ツールのネットワークを見てね。
+    パスワード認証とソーシャル認証のサンプルコード
   </body>
-  <br>
+  <p style="font-weight: bold;">ユーザー登録(password認証)</p>
   name:<input type="text" id="text-name"></input>
   email:<input type="text" id="text-email"></input>
   <br>
   username:<input type="text" id="text-username"></input>
   pasword:<input type="text" id="text-password"></input>
   <br>
-  <button id="button-create">user create</button>
+  <button id="button-create">register</button>
   <br>
+  <p style="font-weight: bold;">ログイン(password認証)</p>
   username:<input type="text" id="text-username-login"></input>
   pasword:<input type="text" id="text-password-login"></input>
   <br>
-  <button id="button-login">user login</button>
+  <button id="button-login">login</button>
   <br>
-  <button id="button-twitter-create">oauth twitter create</button>
-  <button id="button-twitter-login">oauth twitter login</button>
-  <br>
-  <button id="button-google-create">oauth google create</button>
-  <button id="button-google-login">oauth google login</button>
-  <br>
+  <p style="font-weight: bold;">ログアウト(password認証, oauth2共通)</p>
   <button id="button-logout">logout</button>
+  <br>
+  <p style="font-weight: bold;">ユーザー登録(twitter)</p>
+  <button id="button-twitter-create">oauth2 twitter register</button>
+  <button id="button-twitter-login">oauth2 twitter login</button>
+  <br>
+  <p style="font-weight: bold;">ユーザー登録(google)</p>
+  <button id="button-google-create">oauth2 google register</button>
+  <button id="button-google-login">oauth2 google login</button>
+  <br>
 </html>
 
 <script>
