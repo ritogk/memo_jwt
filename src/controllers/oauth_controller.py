@@ -2,11 +2,9 @@ from flask import current_app
 import random
 from service.GoogleAuthService import GoogleAuthService
 from service.TwitterAuthService import TwitterAuthService
-from os import access
 from flask import request, redirect, jsonify, url_for, make_response, current_app
-from controllers.authentication_controller.forms import UserLoginForm
-from db.db import db
-from db.models.all import User
+from service.response.response_authentication_token import response_authentication_token
+from service.response.base_response import base_response
 import jwt
 from service.UserService import UserService
 user_service = UserService()
@@ -16,19 +14,14 @@ google_auth_service = GoogleAuthService()
 
 
 class OAuthController:
-    def __init__(self) -> None:
-        pass
     # twitterの認証画面URLを取得します。
 
     def oauth_twitter_url(self):
         # twitterの認証画面のurlを取得
         url = twitter_auth_service.get_authorization_url()
-        response = make_response({
+        response = base_response.generate_response({
             'url': url
         })
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     # twitter側で認可されたユーザーを登録します。
@@ -53,16 +46,11 @@ class OAuthController:
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = current_app.config['SERVER_DOMAIN']
 
-        response = make_response({
+        body = {
             'id': content["id"]
-        })
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        }
+        response = response_authentication_token.generate_response(body, token)
 
-        response.set_cookie("token", value=token,
-                            httponly=True, samesite=None,
-                            domain=server_domain, path='/')
         return response
 
     # twitterのoauthを使ってログインを行います。
@@ -85,29 +73,20 @@ class OAuthController:
         # jwt生成
         key = current_app.config['JWT_SECRET']
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        server_domain = current_app.config['SERVER_DOMAIN']
 
-        response = make_response({
+        body = {
             'id': content["id"]
-        })
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        }
+        response = response_authentication_token.generate_response(body, token)
 
-        response.set_cookie("token", value=token,
-                            httponly=True, samesite=None,
-                            domain=server_domain, path='/')
         return response
 
     # googleの認証画面URLを取得します。
     def oauth_google_url(self):
         url = google_auth_service.get_authorization_url()
-        response = make_response({
+        response = base_response.generate_response({
             'url': url
         })
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
         return response
 
     # googleに認可されたユーザーを登録します。
@@ -134,18 +113,13 @@ class OAuthController:
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = current_app.config['SERVER_DOMAIN']
 
-        response = make_response({
+        body = {
             'id': user.id,
             'name': user.name,
             'email': user.email
-        })
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        }
+        response = response_authentication_token.generate_response(body, token)
 
-        response.set_cookie("token", value=token,
-                            httponly=True, samesite=None,
-                            domain=server_domain, path='/')
         return response
 
     # googleのoauthを使ってログインを行います。
@@ -170,14 +144,9 @@ class OAuthController:
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = current_app.config['SERVER_DOMAIN']
 
-        response = make_response({
+        body = {
             'id': content["id"]
-        })
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        }
+        response = response_authentication_token.generate_response(body, token)
 
-        response.set_cookie("token", value=token,
-                            httponly=True, samesite=None,
-                            domain=server_domain, path='/')
         return response

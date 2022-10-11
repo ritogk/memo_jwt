@@ -5,6 +5,9 @@ from controllers.authentication_controller.forms import UserLoginForm
 from db.db import db
 from db.models.all import User
 import jwt
+from datetime import datetime
+from service.response.response_authentication_token import response_authentication_token
+from service.response.base_response import base_response
 from service.UserService import UserService
 user_service = UserService()
 
@@ -23,23 +26,12 @@ class UserController:
         content = {}
         content["id"] = user.id
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        # result = jwt.decode(encoded, key, algorithms="HS256")
-        # print(result)
-
-        server_domain = 'server.test.com'
-
-        response = make_response({
+        body = {
             'id': user.id,
             'name': user.name,
             'email': user.email
-        })
-
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.set_cookie("token", value=token,
-                            httponly=True, samesite=None,
-                            domain=server_domain, path='/')
+        }
+        response = response_authentication_token.generate_response(body, token)
         return response
 
     # ログイン
@@ -53,29 +45,18 @@ class UserController:
         content = {}
         content["id"] = user.id
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
-        # result = jwt.decode(encoded, key, algorithms="HS256")
-        # print(result)
-        server_domain = current_app.config['SERVER_DOMAIN']
-        response = make_response({
+        data = {
             'id': user.id,
             'name': user.name,
             'email': user.email
-        })
-
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
-        response.headers.add('Access-Control-Allow-Credentials', 'true')
-        response.set_cookie("token", value=token,
-                            httponly=True, samesite=None,
-                            domain=server_domain, path='/')
+        }
+        response = response_authentication_token.generate_response(data, token)
         return response
 
     # ログアウト
     def logout(self):
-        response = make_response({
+        response = base_response.generate_response({
             'success': True})
-        response.headers.set('Content-Type', 'application/json')
-        response.headers.add('X-Content-Type-Options', 'nosniff')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.delete_cookie(
             "token", domain=current_app.config['SERVER_DOMAIN'])
