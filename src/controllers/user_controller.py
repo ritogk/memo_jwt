@@ -53,3 +53,11 @@ class UserController:
         response.delete_cookie(
             "token", domain=current_app.config['SERVER_DOMAIN'])
         return response
+
+    # 全ユーザー取得
+    def get_users(self):
+        users = user_service.get_users()
+        dicts = [{'id': user.id, 'name': user.name, 'email': user.email}
+                 for user in users]
+        response = base_response.generate_response({'users': dicts})
+        return response

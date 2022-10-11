@@ -1,13 +1,11 @@
-from urllib.parse import unquote
-import base64
+from routes.middleware.ValidityJwt import validate_jwt
 from controllers.oauth_controller import OAuthController
-from flask import jsonify, render_template, make_response, request, Blueprint
+from flask import Blueprint
 from controllers.authentication_controller.authentication_controller import AuthenticationController
 from controllers.user_controller import UserController
 user_controller = UserController()
 authentication_controller = AuthenticationController()
 oauth_controller = OAuthController()
-
 api = Blueprint("api", __name__)
 
 
@@ -63,3 +61,10 @@ def oauth_google_url():
 # twitterの認証画面のurlを取得
 def oauth_twitter_url():
     return oauth_controller.oauth_twitter_url()
+
+
+@api.route('/users', methods=['GET'])
+@validate_jwt
+# 全ユーザーを取得
+def get_users():
+    return user_controller.get_users()
