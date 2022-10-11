@@ -3,8 +3,12 @@
   <body>
     内容はないよう。 開発者ツールのネットワークを見てね。
   </body>
-  <button id="button-twitter-create">oauth twitter create</buton>
-  <button id="button-twitter-login">oauth twitter login</buton>
+  <br>
+  <button id="button-twitter-create">oauth twitter create</button>
+  <button id="button-twitter-login">oauth twitter login</button>
+  <br>
+  <button id="button-google-create">oauth google create</button>
+  <button id="button-google-login">oauth google login</button>
 </html>
 
 <script>
@@ -38,7 +42,39 @@
     .catch((error) => {
       console.error("Error:", error)
     })
+  }; 
+
+  // google 新規登録
+  document.getElementById("button-google-create").onclick = function() {
+    localStorage.setItem("OAUTH_PROVIDER", 'google')
+    localStorage.setItem("OAUTH_MODE", 'create')
+    // ■GET
+    fetch(clinetOrigin + "/oauth/google/url")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success fetch-token:", data)
+      location.href=data.url;
+    })
+    .catch((error) => {
+      console.error("Error:", error)
+    })
   };
+
+  // google ログイン
+  document.getElementById("button-google-login").onclick = function() {
+    localStorage.setItem("OAUTH_PROVIDER", 'google')
+    localStorage.setItem("OAUTH_MODE", 'login')
+    // ■GET
+    fetch(clinetOrigin + "/oauth/google/url")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success fetch-token:", data)
+      location.href=data.url;
+    })
+    .catch((error) => {
+      console.error("Error:", error)
+    })
+  }; 
 
   // localhost or ipだと何故かクッキー送信できないのでhostでフォワーディングする事
   serverOrigin = "http://server.test.com:3000"

@@ -31,19 +31,6 @@ def users():
 def users_login():
     return user_controller.login()
 
-# ユーザー登録(oauth)
-
-
-@api.route('/users/oauth/twitter', methods=['POST'])
-def users_oauth_twitter():
-    return oauth_controller.create_twitter_user()
-
-
-@api.route('/users/oauth/twitter/login', methods=['POST'])
-#
-def users_oauth_twitter_login():
-    return oauth_controller.users_oauth_twitter_login()
-
 # twitterの認証画面のurlを取得
 
 
@@ -51,24 +38,20 @@ def users_oauth_twitter_login():
 def oauth_twitter_url():
     return oauth_controller.oauth_twitter_url()
 
-# twitterのoauth2認可後の処理
+# ユーザー登録(twitter)
 
 
-@api.route('/oauth/twitter/callback', methods=['GET'])
-def oauth_redirect():
+@api.route('/users/oauth/twitter', methods=['POST'])
+def users_oauth_twitter():
     return oauth_controller.create_twitter_user()
 
-# # twitterの認証画面のurlを取得
-# @api.route('/oauth/twitter/url', methods=['GET'])
-# def oauth_twitter_url():
-#     return oauth_controller.oauth_twitter_url()
+# ユーザーログイン(twitter)
 
-# # twitterのoauth2認可後の処理
-# @api.route('/oauth/twitter/callback', methods=['GET'])
-# def oauth_redirect():
-#     return oauth_controller.create_twitter_user()
 
-# googleの認証画面のurlを取得
+@api.route('/users/oauth/twitter/login', methods=['POST'])
+#
+def users_oauth_twitter_login():
+    return oauth_controller.users_oauth_twitter_login()
 
 
 @api.route('/oauth/google/url', methods=['GET'])
@@ -78,9 +61,14 @@ def oauth_google_url():
 # googleのoauth2認可後の処理
 
 
-@api.route('/oauth/google/callback', methods=['GET'])
-def oauth_google_callback():
+@api.route('/users/oauth/google', methods=['POST'])
+def users_oauth_google():
     return oauth_controller.create_google_user()
+
+
+@api.route('/users/oauth/google/login', methods=['POST'])
+def users_oauth_google_login():
+    return oauth_controller.users_oauth_google_login()
 
 # 認証画面からリダイレクト時に返却されたcodeを使いaccess_tokenを取得する
 
