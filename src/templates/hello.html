@@ -3,12 +3,46 @@
   <body>
     内容はないよう。 開発者ツールのネットワークを見てね。
   </body>
+  <button id="button-twitter-create">oauth twitter create</buton>
+  <button id="button-twitter-login">oauth twitter login</buton>
 </html>
 
 <script>
+  // twitter 新規登録
+  document.getElementById("button-twitter-create").onclick = function() {
+    localStorage.setItem("OAUTH_PROVIDER", 'twitter')
+    localStorage.setItem("OAUTH_MODE", 'create')
+    // ■GET
+    fetch(clinetOrigin + "/oauth/twitter/url")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success fetch-token:", data)
+      location.href=data.url;
+    })
+    .catch((error) => {
+      console.error("Error:", error)
+    })
+  };
+
+  // twitter ログイン
+  document.getElementById("button-twitter-login").onclick = function() {
+    localStorage.setItem("OAUTH_PROVIDER", 'twitter')
+    localStorage.setItem("OAUTH_MODE", 'login')
+    // ■GET
+    fetch(clinetOrigin + "/oauth/twitter/url")
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success fetch-token:", data)
+      location.href=data.url;
+    })
+    .catch((error) => {
+      console.error("Error:", error)
+    })
+  };
+
   // localhost or ipだと何故かクッキー送信できないのでhostでフォワーディングする事
   serverOrigin = "http://server.test.com:3000"
-  clinetOrigin = "https://7c3b-2400-2200-3eb-e896-a949-dc1f-fcc6-3f90.jp.ngrok.io"
+  clinetOrigin = "https://df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io/"
 
   const code = getParam("code", window.location.href)
   if(code){

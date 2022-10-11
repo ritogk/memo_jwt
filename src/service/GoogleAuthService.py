@@ -6,56 +6,58 @@ from typing import Tuple
 from flask import current_app
 import jwt
 
+
 class GoogleAuthService:
-  GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
-  GOOGLE_CLIENT_SECRET = "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"
-  REDIRECT_URI = "https://d2b8-2400-2651-47e0-e000-60d5-18e7-a7a8-e505.jp.ngrok.io/oauth/google/callback"
-  OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
-  TOKEN_URL = "https://oauth2.googleapis.com/token"
-  USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
-  SCOPES = ['openid','https://www.googleapis.com/auth/userinfo.email', 'https://www.googleapis.com/auth/userinfo.profile']
-  
-  def get_authorization_url(self) -> str:
-      # ここでGoogle認証画面に遷移するためのURLを取得する
-      # OAuthにない任意のパラメータをもたせたい場合は、 state を使うとよい
-      # ex)
-      #   # name を渡したい場合
-      #   exp = int(datetime.utcnow().timestamp()) + 30
-      #   encoded = jwt.encode({"exp": exp, "name": "hoge"}, "secrets", algorithm="HS256")
-      #   state = encoded.decode("utf-8")
-      #   redirect_url, _ = self._client().authorization_url(self.OAUTH_URL, state=state)
-      redirect_url, _ = self._client().authorization_url(
-          self.OAUTH_URL,
-          access_type="offline",
-          prompt="consent",
+    GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
+    GOOGLE_CLIENT_SECRET = "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"
+    REDIRECT_URI = "https://df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io/oauth/google/callback"
+    OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
+    TOKEN_URL = "https://oauth2.googleapis.com/token"
+    USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
+    SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email',
+              'https://www.googleapis.com/auth/userinfo.profile']
+
+    def get_authorization_url(self) -> str:
+        # ここでGoogle認証画面に遷移するためのURLを取得する
+        # OAuthにない任意のパラメータをもたせたい場合は、 state を使うとよい
+        # ex)
+        #   # name を渡したい場合
+        #   exp = int(datetime.utcnow().timestamp()) + 30
+        #   encoded = jwt.encode({"exp": exp, "name": "hoge"}, "secrets", algorithm="HS256")
+        #   state = encoded.decode("utf-8")
+        #   redirect_url, _ = self._client().authorization_url(self.OAUTH_URL, state=state)
+        redirect_url, _ = self._client().authorization_url(
+            self.OAUTH_URL,
+            access_type="offline",
+            prompt="consent",
         )
-      return redirect_url
+        return redirect_url
 
-  def fetch_token(self, code: str) -> Tuple[str, str]:
-      # Googleからリダイレクトして来たときにURLに付与されている code を使って token を取得する
-      token = self._client().fetch_token(
-          self.TOKEN_URL,
-          client_secret=self.GOOGLE_CLIENT_SECRET,
-          code=code,
-      )
-      print(token)
-      return token["access_token"], token["refresh_token"], 
+    def fetch_token(self, code: str) -> Tuple[str, str]:
+        # Googleからリダイレクトして来たときにURLに付与されている code を使って token を取得する
+        token = self._client().fetch_token(
+            self.TOKEN_URL,
+            client_secret=self.GOOGLE_CLIENT_SECRET,
+            code=code,
+        )
+        print(token)
+        return token["access_token"], token["refresh_token"],
 
-  def get_user_info(self, access_token: str) -> Optional[dict]:
-      # access_token を使って、ユーザ情報を取得する
-      endpoint_url = f"{self.USER_INFO_URL}?access_token={access_token}"
-      print(endpoint_url)
-      response = requests.get(endpoint_url)
-      print(response)
-      
-      if response.status_code == 200:
-          return response.json()
+    def get_user_info(self, access_token: str) -> Optional[dict]:
+        # access_token を使って、ユーザ情報を取得する
+        endpoint_url = f"{self.USER_INFO_URL}?access_token={access_token}"
+        print(endpoint_url)
+        response = requests.get(endpoint_url)
+        print(response)
 
-      return None
+        if response.status_code == 200:
+            return response.json()
 
-  def _client(self) -> OAuth2Session:
-      return OAuth2Session(
-          self.GOOGLE_CLIENT_ID,
-          scope=self.SCOPES,
-          redirect_uri=self.REDIRECT_URI
-      )  
+        return None
+
+    def _client(self) -> OAuth2Session:
+        return OAuth2Session(
+            self.GOOGLE_CLIENT_ID,
+            scope=self.SCOPES,
+            redirect_uri=self.REDIRECT_URI
+        )

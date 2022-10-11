@@ -1,3 +1,6 @@
+import random
+from service.GoogleAuthService import GoogleAuthService
+from service.TwitterAuthService import TwitterAuthService
 from os import access
 from flask import request, redirect, jsonify, url_for, make_response, current_app
 from controllers.authentication_controller.forms import UserLoginForm
@@ -7,59 +10,94 @@ import jwt
 from service.UserService import UserService
 user_service = UserService()
 
-from service.TwitterAuthService import TwitterAuthService
 twitter_auth_service = TwitterAuthService()
-
-from service.GoogleAuthService import GoogleAuthService
 google_auth_service = GoogleAuthService()
 
-import random
+
 class OAuthController:
+    # twitterの認証画面URLを取得します。
     def oauth_twitter_url(self):
         # twitterの認証画面のurlを取得
-        return twitter_auth_service.get_authorization_url()
-    
+        url = twitter_auth_service.get_authorization_url()
+        response = make_response({
+            'url': url
+        })
+        response.headers.set('Content-Type', 'application/json')
+        response.headers.add('X-Content-Type-Options', 'nosniff')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+
+    # twitter側で認可されたユーザーを登録します。
     def create_twitter_user(self):
-        code = request.args.get("code")
+        code = request.json["code"]
         # codeからアクセストークンを取得
         access_token, refresh_token = twitter_auth_service.fetch_token(code)
         print(access_token)
         print(refresh_token)
         # twitterからユーザー情報取得
         twitter_user = twitter_auth_service.get_user_info(access_token)
-        
+
         content = {}
-        oauth_user = user_service.get_oauth_user('twitter', twitter_user['data']['id'])
-        if oauth_user == None:
-            # ユーザー登録
-            user = user_service.create_oauth_user('twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), twitter_user['data']['id'])
-            content["id"] = user.id
-            content["name"] = user.name
-        else:
-            # ログイン
-            content["id"] = oauth_user.id
-            content["name"] = oauth_user.name
-        
+        # ユーザー登録
+        user = user_service.create_oauth_user(
+            'twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), twitter_user['data']['id'])
+        content["id"] = user.id
+        content["name"] = user.name
+
         # jwt生成
         key = current_app.config['JWT_SECRET']
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = 'server.test.com'
-        
+
         response = make_response({
             'id': content["id"]
         })
         response.headers.set('Content-Type', 'application/json')
         response.headers.add('X-Content-Type-Options', 'nosniff')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        
+
         response.set_cookie("token", value=token,
-                        httponly=True, samesite=None,
-                        domain=server_domain, path='/')
+                            httponly=True, samesite=None,
+                            domain=server_domain, path='/')
         return response
-    
+
+    # twitterのoauthを使ってログインを行います。
+    def users_oauth_twitter_login(self):
+        code = request.json["code"]
+        # codeからアクセストークンを取得
+        access_token, refresh_token = twitter_auth_service.fetch_token(code)
+        print(access_token)
+        print(refresh_token)
+        # twitterからユーザー情報取得
+        twitter_user = twitter_auth_service.get_user_info(access_token)
+
+        content = {}
+        oauth_user = user_service.get_oauth_user(
+            'twitter', twitter_user['data']['id'])
+        # ログイン
+        content["id"] = oauth_user.id
+        content["name"] = oauth_user.name
+
+        # jwt生成
+        key = current_app.config['JWT_SECRET']
+        token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
+        server_domain = 'server.test.com'
+
+        response = make_response({
+            'id': content["id"]
+        })
+        response.headers.set('Content-Type', 'application/json')
+        response.headers.add('X-Content-Type-Options', 'nosniff')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+
+        response.set_cookie("token", value=token,
+                            httponly=True, samesite=None,
+                            domain=server_domain, path='/')
+        return response
+
     def oauth_google_url(self):
         return google_auth_service.get_authorization_url()
-    
+
     def create_google_user(self):
         code = request.args.get("code")
         # codeからアクセストークンを取得
@@ -69,24 +107,25 @@ class OAuthController:
         # googleからユーザー情報取得
         google_user = google_auth_service.get_user_info(access_token)
         print(google_user)
-        
+
         content = {}
         oauth_user = user_service.get_oauth_user('google', google_user['id'])
         if oauth_user == None:
             # ユーザー登録
-            user = user_service.create_oauth_user('google', google_user['name'], google_user['email'], access_token, refresh_token)
+            user = user_service.create_oauth_user(
+                'google', google_user['name'], google_user['email'], access_token, refresh_token)
             content["id"] = user.id
         else:
             # ログイン
             content["id"] = oauth_user.id
-            
+
         # jwt生成
         key = current_app.config['JWT_SECRET']
         print(key)
         # content = {}
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = 'server.test.com'
-        
+
         response = make_response({
             'id': user.id,
             'name': user.name,
@@ -95,12 +134,8 @@ class OAuthController:
         response.headers.set('Content-Type', 'application/json')
         response.headers.add('X-Content-Type-Options', 'nosniff')
         response.headers.add('Access-Control-Allow-Credentials', 'true')
-        
+
         response.set_cookie("token", value=token,
-                        httponly=True, samesite=None,
-                        domain=server_domain, path='/')
+                            httponly=True, samesite=None,
+                            domain=server_domain, path='/')
         return response
-        
-        
-        
-        
