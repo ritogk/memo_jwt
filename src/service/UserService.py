@@ -6,8 +6,10 @@ from requests_oauthlib import OAuth2Session
 from db.models.all import User, UserAuthentication, UserOauth
 from db.db import db
 import hashlib
+from typing import Union
 
 class UserService:
+  # ユーザー登録(password認証)
   def create_user(self, name: str, email: str, username: str, password: str) -> User:
       password_hash = hashlib.sha256((password + current_app.config['USER_PASSWORD_SALT']).encode()).hexdigest()
       if(db.session.query(db.exists().where(UserAuthentication.username == username).where(UserAuthentication.password == password_hash)).scalar()):
@@ -23,7 +25,8 @@ class UserService:
         db.session.add(user_authentication)
         db.session.commit()
         return user
-      
+  
+  # ログイン(password認証)
   def login(self, username: str, password: str) -> User:
       password_hash = hashlib.sha256((password + current_app.config['USER_PASSWORD_SALT']).encode()).hexdigest()
       user_authentication = db.session.query(UserAuthentication).filter_by(username = username,
@@ -32,16 +35,26 @@ class UserService:
         return 'パスワード又はユーザー名が間違っています。'
       
       return user_authentication.user
-           
-  def create_oauth_user(self, provider: str, name: str, email: str, access_token:str, refresh_token: str) -> User:
-      if(db.session.query(db.exists().where(UserOauth.access_token == access_token).where(UserOauth.refresh_token == refresh_token)).scalar()):
-        return '存在してます。'
-      else:
-        user = User(name, email)
-        db.session.add(user)
-        db.session.flush()
-        print(user.id)
-        user_oauth = UserOauth(user.id, provider, access_token, refresh_token)
-        db.session.add(user_oauth)
-        db.session.commit()
-        return user  
+  
+  # ユーザー登録(oauth)
+  def create_oauth_user(self, provider: str, name: str, email: str, identity:str) -> User:
+      user = User(name, email)
+      db.session.add(user)
+      db.session.flush()
+      print(user.id)
+      user_oauth = UserOauth(user.id, provider, identity)
+      db.session.add(user_oauth)
+      db.session.commit()
+      return user
+  
+  # ユーザー取得(oauth)
+  def get_oauth_user(self, provider: str, identity: str) -> Union[User, None]:
+    user_oauth: UserOauth = db.session.query(UserOauth).filter_by(identity = identity, provider = provider).first()
+    
+    print(user_oauth)
+    if(user_oauth):
+      return user_oauth.user
+    else:
+      return None
+    
+    

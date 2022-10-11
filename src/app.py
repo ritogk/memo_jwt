@@ -18,6 +18,7 @@ def create_app():
     # その他
     app.config['JWT_SECRET'] = DevelopmentConfig.JWT_SECRET
     app.config['USER_PASSWORD_SALT'] = DevelopmentConfig.USER_PASSWORD_SALT
+    app.config['SERVER_BASE_URL'] =DevelopmentConfig.SERVER_BASE_URL
     return app
 
 app = create_app()

@@ -27,19 +27,26 @@ class OAuthController:
         print(refresh_token)
         # twitterからユーザー情報取得
         twitter_user = twitter_auth_service.get_user_info(access_token)
-        # ユーザー登録
-        user = user_service.create_oauth_user('twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), access_token, refresh_token)
+        
+        content = {}
+        oauth_user = user_service.get_oauth_user('twitter', twitter_user['data']['id'])
+        if oauth_user == None:
+            # ユーザー登録
+            user = user_service.create_oauth_user('twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), twitter_user['data']['id'])
+            content["id"] = user.id
+            content["name"] = user.name
+        else:
+            # ログイン
+            content["id"] = oauth_user.id
+            content["name"] = oauth_user.name
+        
         # jwt生成
         key = current_app.config['JWT_SECRET']
-        content = {}
-        content["id"] = user.id
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = 'server.test.com'
         
         response = make_response({
-            'id': user.id,
-            'name': user.name,
-            'email': user.email
+            'id': content["id"]
         })
         response.headers.set('Content-Type', 'application/json')
         response.headers.add('X-Content-Type-Options', 'nosniff')
@@ -48,6 +55,7 @@ class OAuthController:
         response.set_cookie("token", value=token,
                         httponly=True, samesite=None,
                         domain=server_domain, path='/')
+        return response
     
     def oauth_google_url(self):
         return google_auth_service.get_authorization_url()
@@ -61,13 +69,21 @@ class OAuthController:
         # googleからユーザー情報取得
         google_user = google_auth_service.get_user_info(access_token)
         print(google_user)
-        # ユーザー登録
-        user = user_service.create_oauth_user('google', google_user['name'], google_user['email'], access_token, refresh_token)
+        
+        content = {}
+        oauth_user = user_service.get_oauth_user('google', google_user['id'])
+        if oauth_user == None:
+            # ユーザー登録
+            user = user_service.create_oauth_user('google', google_user['name'], google_user['email'], access_token, refresh_token)
+            content["id"] = user.id
+        else:
+            # ログイン
+            content["id"] = oauth_user.id
+            
         # jwt生成
         key = current_app.config['JWT_SECRET']
         print(key)
-        content = {}
-        content["id"] = user.id
+        # content = {}
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         server_domain = 'server.test.com'
         

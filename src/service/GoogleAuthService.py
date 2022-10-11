@@ -3,11 +3,13 @@ import requests
 from typing import Optional
 from requests_oauthlib import OAuth2Session
 from typing import Tuple
+from flask import current_app
+import jwt
 
 class GoogleAuthService:
   GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
   GOOGLE_CLIENT_SECRET = "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"
-  REDIRECT_URI = "https://deea-2400-2200-622-b4b8-bd19-a8db-794c-f201.jp.ngrok.io/oauth/google/callback"
+  REDIRECT_URI = "https://d2b8-2400-2651-47e0-e000-60d5-18e7-a7a8-e505.jp.ngrok.io/oauth/google/callback"
   OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
   TOKEN_URL = "https://oauth2.googleapis.com/token"
   USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
@@ -22,11 +24,10 @@ class GoogleAuthService:
       #   encoded = jwt.encode({"exp": exp, "name": "hoge"}, "secrets", algorithm="HS256")
       #   state = encoded.decode("utf-8")
       #   redirect_url, _ = self._client().authorization_url(self.OAUTH_URL, state=state)
-
       redirect_url, _ = self._client().authorization_url(
           self.OAUTH_URL,
           access_type="offline",
-          prompt="consent"
+          prompt="consent",
         )
       return redirect_url
 
