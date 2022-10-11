@@ -4,7 +4,6 @@ from typing import Optional
 from requests_oauthlib import OAuth2Session
 from requests.auth import AuthBase, HTTPBasicAuth
 from typing import Tuple
-from flask import current_app
 
 
 class TwitterAuthService:

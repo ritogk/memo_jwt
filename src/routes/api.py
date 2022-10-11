@@ -1,18 +1,11 @@
-from service.GoogleAuthService import GoogleAuthService
 from urllib.parse import unquote
 import base64
 from controllers.oauth_controller import OAuthController
-from service.TwitterAuthService import TwitterAuthService
 from flask import jsonify, render_template, make_response, request, Blueprint
 from controllers.authentication_controller.authentication_controller import AuthenticationController
-
 from controllers.user_controller import UserController
 user_controller = UserController()
-
-twitter_auth_service = TwitterAuthService()
-
 authentication_controller = AuthenticationController()
-
 oauth_controller = OAuthController()
 
 api = Blueprint("api", __name__)

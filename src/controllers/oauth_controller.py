@@ -1,3 +1,4 @@
+from flask import current_app
 import random
 from service.GoogleAuthService import GoogleAuthService
 from service.TwitterAuthService import TwitterAuthService
@@ -15,7 +16,10 @@ google_auth_service = GoogleAuthService()
 
 
 class OAuthController:
+    def __init__(self) -> None:
+        pass
     # twitterの認証画面URLを取得します。
+
     def oauth_twitter_url(self):
         # twitterの認証画面のurlを取得
         url = twitter_auth_service.get_authorization_url()
