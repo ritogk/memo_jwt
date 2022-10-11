@@ -4,6 +4,19 @@
     内容はないよう。 開発者ツールのネットワークを見てね。
   </body>
   <br>
+  name:<input type="text" id="text-name"></input>
+  email:<input type="text" id="text-email"></input>
+  <br>
+  username:<input type="text" id="text-username"></input>
+  pasword:<input type="text" id="text-password"></input>
+  <br>
+  <button id="button-create">user create</button>
+  <br>
+  username:<input type="text" id="text-username-login"></input>
+  pasword:<input type="text" id="text-password-login"></input>
+  <br>
+  <button id="button-login">user login</button>
+  <br>
   <button id="button-twitter-create">oauth twitter create</button>
   <button id="button-twitter-login">oauth twitter login</button>
   <br>
@@ -14,6 +27,52 @@
 </html>
 
 <script>
+  // create
+  document.getElementById("button-create").onclick = function() {
+    const data = {
+      name: document.getElementById("text-name").value,
+      email: document.getElementById("text-email").value,
+      username: document.getElementById("text-username").value,
+      password: document.getElementById("text-password").value,
+    };
+    const param  = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    };
+    fetch(clinetOrigin + '/users', param)
+    .then((res)=>{
+      return( res.json() );
+    })
+    .then((data)=>{
+      console.log('create owata');
+    });
+  };
+
+  // login
+  document.getElementById("button-login").onclick = function() {
+    const data = {
+      username: document.getElementById("text-username-login").value,
+      password: document.getElementById("text-password-login").value,
+    };
+    const param  = {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(data)
+    };
+    fetch(clinetOrigin + '/users/login', param)
+    .then((res)=>{
+      return( res.json() );
+    })
+    .then((data)=>{
+      console.log('login owata');
+    });
+  };
+
   // logout
   document.getElementById("button-logout").onclick = function() {
     const data = {};

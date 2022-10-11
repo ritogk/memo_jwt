@@ -55,9 +55,7 @@ class UserController:
         token = jwt.encode(content, key, algorithm="HS256").decode('utf-8')
         # result = jwt.decode(encoded, key, algorithms="HS256")
         # print(result)
-
-        server_domain = 'server.test.com'
-
+        server_domain = current_app.config['SERVER_DOMAIN']
         response = make_response({
             'id': user.id,
             'name': user.name,
