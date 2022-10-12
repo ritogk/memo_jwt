@@ -3,19 +3,27 @@ import requests
 from typing import Optional
 from requests_oauthlib import OAuth2Session
 from typing import Tuple
-from flask import current_app
-import jwt
+from Config import Config
 
 
 class GoogleAuthService:
-    GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
-    GOOGLE_CLIENT_SECRET = "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"
-    REDIRECT_URI = "https://8f23-2400-2651-47e0-e000-750e-3328-6599-bd2d.jp.ngrok.io/oauth/callback"
+    GOOGLE_CLIENT_ID = ''
+    GOOGLE_CLIENT_SECRET = ''
+    REDIRECT_URI = ''
     OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
     TOKEN_URL = "https://oauth2.googleapis.com/token"
     USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"
     SCOPES = ['openid', 'https://www.googleapis.com/auth/userinfo.email',
               'https://www.googleapis.com/auth/userinfo.profile']
+
+    def __init__(self) -> None:
+        config = Config.getInstance()
+        self.GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID
+        self.GOOGLE_CLIENT_SECRET = config.GOOGLE_CLIENT_SECRET
+        self.REDIRECT_URI = config.SERVER_BASE_URL + '/oauth/callback'
+        print(config.GOOGLE_CLIENT_ID)
+        print(config.DEBUG)
+        print(config.GOOGLE_CLIENT_SECRET)
 
     def get_authorization_url(self) -> str:
         # ここでGoogle認証画面に遷移するためのURLを取得する
@@ -26,11 +34,13 @@ class GoogleAuthService:
         #   encoded = jwt.encode({"exp": exp, "name": "hoge"}, "secrets", algorithm="HS256")
         #   state = encoded.decode("utf-8")
         #   redirect_url, _ = self._client().authorization_url(self.OAUTH_URL, state=state)
+
         redirect_url, _ = self._client().authorization_url(
             self.OAUTH_URL,
             access_type="offline",
             prompt="consent",
         )
+        print(redirect_url)
         return redirect_url
 
     def fetch_token(self, code: str) -> Tuple[str, str]:

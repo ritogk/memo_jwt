@@ -1,16 +1,19 @@
-from flask import current_app
 from db.models.all import User, UserAuthentication, UserOauth
 from db.db import db
 import hashlib
 from typing import Union
 from typing import List
 
+from Config import Config
+
 
 class UserService:
+    config = Config.getInstance()
     # ユーザー登録(password認証)
+
     def create_user(self, name: str, email: str, username: str, password: str) -> User:
         password_hash = hashlib.sha256(
-            (password + current_app.config['USER_PASSWORD_SALT']).encode()).hexdigest()
+            (password + self.config.USER_PASSWORD_SALT).encode()).hexdigest()
         if (db.session.query(db.exists().where(UserAuthentication.username == username).where(UserAuthentication.password == password_hash)).scalar()):
             return '存在してます。'
         else:
@@ -28,7 +31,7 @@ class UserService:
     # ログイン(password認証)
     def login(self, username: str, password: str) -> User:
         password_hash = hashlib.sha256(
-            (password + current_app.config['USER_PASSWORD_SALT']).encode()).hexdigest()
+            (password + self.config.USER_PASSWORD_SALT).encode()).hexdigest()
         user_authentication = db.session.query(UserAuthentication).filter_by(username=username,
                                                                              password=password_hash).first()
         if not user_authentication:

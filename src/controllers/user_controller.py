@@ -1,5 +1,6 @@
+from Config import Config
 from service.JwtService import JwtService
-from flask import request, current_app
+from flask import request
 from service.response.response_authentication_token import response_authentication_token
 from service.response.base_response import base_response
 from service.UserService import UserService
@@ -7,7 +8,9 @@ user_service = UserService()
 
 
 class UserController:
+    config = Config.getInstance()
     # ユーザーの新規登録(password認証)
+
     def create(self):
         name = request.json["name"]
         email = request.json["email"]
@@ -51,7 +54,7 @@ class UserController:
             'success': True})
         response.headers.add('Access-Control-Allow-Credentials', 'true')
         response.delete_cookie(
-            "token", domain=current_app.config['SERVER_DOMAIN'])
+            "token", domain=self.config.SERVER_DOMAIN)
         return response
 
     # 全ユーザー取得

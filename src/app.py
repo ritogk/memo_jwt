@@ -3,8 +3,6 @@ from routes.api import api
 from routes.view import view
 import db.models.all
 import db.db as db
-from config.DevelopmentConfig import DevelopmentConfig
-
 # webアプリケーション作成
 
 
@@ -17,12 +15,8 @@ def create_app():
     # ルーティングの設定
     app.register_blueprint(view)
     app.register_blueprint(api)
-    # その他
-    app.config['JWT_SECRET'] = DevelopmentConfig.JWT_SECRET
-    app.config['USER_PASSWORD_SALT'] = DevelopmentConfig.USER_PASSWORD_SALT
-    app.config['SERVER_BASE_URL'] = DevelopmentConfig.SERVER_BASE_URL
-    app.config['SERVER_DOMAIN'] = DevelopmentConfig.SERVER_DOMAIN
+
     return app
 
 
-app = create_app()
+# app = create_app()

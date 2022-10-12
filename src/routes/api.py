@@ -1,10 +1,8 @@
 from routes.middleware.ValidityJwt import validate_jwt
 from controllers.oauth_controller import OAuthController
 from flask import Blueprint
-from controllers.authentication_controller.authentication_controller import AuthenticationController
 from controllers.user_controller import UserController
 user_controller = UserController()
-authentication_controller = AuthenticationController()
 oauth_controller = OAuthController()
 api = Blueprint("api", __name__)
 

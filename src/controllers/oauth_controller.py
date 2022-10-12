@@ -1,25 +1,27 @@
-from calendar import c
-from flask import current_app
 import random
 from service.GoogleAuthService import GoogleAuthService
 from service.TwitterAuthService import TwitterAuthService
-from flask import request, redirect, jsonify, url_for, make_response, current_app
+from flask import request
 from service.response.response_authentication_token import response_authentication_token
 from service.response.base_response import base_response
 from service.JwtService import JwtService
 from service.UserService import UserService
-user_service = UserService()
-
-twitter_auth_service = TwitterAuthService()
-google_auth_service = GoogleAuthService()
 
 
 class OAuthController:
-    # twitterの認証画面URLを取得します。
+    user_service: UserService
+    twitter_auth_service: TwitterAuthService
+    google_auth_service: GoogleAuthService
 
+    def __init__(self) -> None:
+        self.user_service = UserService()
+        self.twitter_auth_service = TwitterAuthService()
+        self.google_auth_service = GoogleAuthService()
+
+    # twitterの認証画面URLを取得します。
     def oauth_twitter_url(self):
         # twitterの認証画面のurlを取得
-        url = twitter_auth_service.get_authorization_url()
+        url = self.twitter_auth_service.get_authorization_url()
         response = base_response.generate_response({
             'url': url
         })
@@ -29,14 +31,15 @@ class OAuthController:
     def create_twitter_user(self):
         code = request.json["code"]
         # codeからアクセストークンを取得
-        access_token, refresh_token = twitter_auth_service.fetch_token(code)
+        access_token, refresh_token = self.twitter_auth_service.fetch_token(
+            code)
         print(access_token)
         print(refresh_token)
         # twitterからユーザー情報取得
-        twitter_user = twitter_auth_service.get_user_info(access_token)
+        twitter_user = self.twitter_auth_service.get_user_info(access_token)
 
         # ユーザー登録
-        user = user_service.create_oauth_user(
+        user = self.user_service.create_oauth_user(
             'twitter', twitter_user['data']['name'], twitter_user['data']['id'] + '@' + str(random.random()), twitter_user['data']['id'])
 
         # jwt生成
@@ -57,13 +60,14 @@ class OAuthController:
     def users_oauth_twitter_login(self):
         code = request.json["code"]
         # codeからアクセストークンを取得
-        access_token, refresh_token = twitter_auth_service.fetch_token(code)
+        access_token, refresh_token = self.twitter_auth_service.fetch_token(
+            code)
         print(access_token)
         print(refresh_token)
         # twitterからユーザー情報取得
-        twitter_user = twitter_auth_service.get_user_info(access_token)
+        twitter_user = self.twitter_auth_service.get_user_info(access_token)
 
-        oauth_user = user_service.get_oauth_user(
+        oauth_user = self.user_service.get_oauth_user(
             'twitter', twitter_user['data']['id'])
         if (oauth_user == None):
             return 'errorです。'
@@ -83,7 +87,7 @@ class OAuthController:
 
     # googleの認証画面URLを取得します。
     def oauth_google_url(self):
-        url = google_auth_service.get_authorization_url()
+        url = self.google_auth_service.get_authorization_url()
         response = base_response.generate_response({
             'url': url
         })
@@ -93,15 +97,16 @@ class OAuthController:
     def create_google_user(self):
         code = request.json["code"]
         # codeからアクセストークンを取得
-        access_token, refresh_token = google_auth_service.fetch_token(code)
+        access_token, refresh_token = self.google_auth_service.fetch_token(
+            code)
         print(access_token)
         print(refresh_token)
         # googleからユーザー情報取得
-        google_user = google_auth_service.get_user_info(access_token)
+        google_user = self.google_auth_service.get_user_info(access_token)
         print(google_user)
 
         # ユーザー登録
-        user = user_service.create_oauth_user(
+        user = self.user_service.create_oauth_user(
             'google', google_user['name'], google_user['email'], google_user['id'])
 
         # jwt生成
@@ -123,14 +128,16 @@ class OAuthController:
     def users_oauth_google_login(self):
         code = request.json["code"]
         # codeからアクセストークンを取得
-        access_token, refresh_token = google_auth_service.fetch_token(code)
+        access_token, refresh_token = self.google_auth_service.fetch_token(
+            code)
         print(access_token)
         print(refresh_token)
         # googleからユーザー情報取得
-        google_user = google_auth_service.get_user_info(access_token)
+        google_user = self.google_auth_service.get_user_info(access_token)
         print(google_user)
 
-        oauth_user = user_service.get_oauth_user('google', google_user['id'])
+        oauth_user = self.user_service.get_oauth_user(
+            'google', google_user['id'])
 
         # jwt生成
         content = {}
