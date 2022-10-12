@@ -7,7 +7,7 @@ cd src
 ./e_app.sh
 ```
 ## 画面
-<img src="https://user-images.githubusercontent.com/72111956/195020613-e8ff1f55-e1cd-4d0a-9af4-8354d49dacb4.png" width="50%" />
+<img src="https://user-images.githubusercontent.com/72111956/195317498-cddcc7f7-6846-4e7c-ae70-8ebe017086e3.png" width="50%" />
 
 ## twitter oauth2 
 twitterのoauth2はデフォルトでメールアドレスが取得できない。  
@@ -17,7 +17,4 @@ twitter側に申請しないと取得できないっぽ(めんどいからして
 ## google oauth2
 何度もoauth2を使うととレスポンスが返ってこなくなる・・・  
 簡単に本名とメールアドレスが取得できて良い！  
-facebookも似たような感じらしい。
-
-# 実装メモ
-https://reflective-gallon-3d7.notion.site/oauth-408bb21fd9ed45328a295d7d6ce9a9e1
+facebookも本名とメールアドレスが簡単にとれるらしい。
