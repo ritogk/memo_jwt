@@ -48,7 +48,7 @@
       },
       body: JSON.stringify(data)
     };
-    fetch(clinetOrigin + '/users', param)
+    fetch('/users', param)
     .then((res)=>{
       return( res.json() );
     })
@@ -70,7 +70,7 @@
       },
       body: JSON.stringify(data)
     };
-    fetch(clinetOrigin + '/users/login', param)
+    fetch('/users/login', param)
     .then((res)=>{
       return( res.json() );
     })
@@ -89,7 +89,7 @@
       },
       body: JSON.stringify(data)
     };
-    fetch(clinetOrigin + '/users/logout', param)
+    fetch('/users/logout', param)
     .then((res)=>{
       return( res.json() );
     })
@@ -103,7 +103,7 @@
     localStorage.setItem("OAUTH_PROVIDER", 'twitter')
     localStorage.setItem("OAUTH_MODE", 'create')
     // ■GET
-    fetch(clinetOrigin + "/oauth/twitter/url")
+    fetch("/oauth/twitter/url")
     .then((response) => response.json())
     .then((data) => {
       console.log("Success fetch-token:", data)
@@ -119,7 +119,7 @@
     localStorage.setItem("OAUTH_PROVIDER", 'twitter')
     localStorage.setItem("OAUTH_MODE", 'login')
     // ■GET
-    fetch(clinetOrigin + "/oauth/twitter/url")
+    fetch("/oauth/twitter/url")
     .then((response) => response.json())
     .then((data) => {
       console.log("Success fetch-token:", data)
@@ -135,7 +135,7 @@
     localStorage.setItem("OAUTH_PROVIDER", 'google')
     localStorage.setItem("OAUTH_MODE", 'create')
     // ■GET
-    fetch(clinetOrigin + "/oauth/google/url")
+    fetch("/oauth/google/url")
     .then((response) => response.json())
     .then((data) => {
       console.log("Success fetch-token:", data)
@@ -151,7 +151,7 @@
     localStorage.setItem("OAUTH_PROVIDER", 'google')
     localStorage.setItem("OAUTH_MODE", 'login')
     // ■GET
-    fetch(clinetOrigin + "/oauth/google/url")
+    fetch("/oauth/google/url")
     .then((response) => response.json())
     .then((data) => {
       console.log("Success fetch-token:", data)
@@ -163,17 +163,15 @@
   }; 
 
   // localhost or ipだと何故かクッキー送信できないのでhostでフォワーディングする事
-  serverOrigin = "http://server.test.com:3000"
-  clinetOrigin = "https://df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io/"
 
   const code = getParam("code", window.location.href)
   if(code){
     // ■GET
-    fetch(clinetOrigin + "/twitter/fetch-token?code=" + encodeURIComponent(code))
+    fetch("/twitter/fetch-token?code=" + encodeURIComponent(code))
     .then((response) => response.json())
     .then((data) => {
       console.log("Success fetch-token:", data)
-      fetch(clinetOrigin + "/twitter/get-user-info?token=" + data.token)
+      fetch("/twitter/get-user-info?token=" + data.token)
       .then((response) => response.json())
       .then((data) => {
         console.log("Success get-user-info:", data)

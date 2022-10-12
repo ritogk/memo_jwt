@@ -10,7 +10,7 @@ import jwt
 class GoogleAuthService:
     GOOGLE_CLIENT_ID = "690002281063-rakv20u6usg5tp7ubd2lp4n7c656b2q7.apps.googleusercontent.com"
     GOOGLE_CLIENT_SECRET = "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"
-    REDIRECT_URI = "https://df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io/oauth/callback"
+    REDIRECT_URI = "https://8f23-2400-2651-47e0-e000-750e-3328-6599-bd2d.jp.ngrok.io/oauth/callback"
     OAUTH_URL = "https://accounts.google.com/o/oauth2/auth"
     TOKEN_URL = "https://oauth2.googleapis.com/token"
     USER_INFO_URL = "https://www.googleapis.com/oauth2/v1/userinfo"

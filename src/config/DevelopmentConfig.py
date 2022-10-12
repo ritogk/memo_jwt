@@ -11,8 +11,8 @@ class DevelopmentConfig:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
     TEMPLATES_AUTO_RELOAD = True
-    SERVER_BASE_URL = 'https://df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io'
-    SERVER_DOMAIN = 'df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io'
+    SERVER_BASE_URL = 'https://8f23-2400-2651-47e0-e000-750e-3328-6599-bd2d.jp.ngrok.io'
+    SERVER_DOMAIN = '8f23-2400-2651-47e0-e000-750e-3328-6599-bd2d.jp.ngrok.io'
     USER_PASSWORD_SALT = 'flask_app_user_salt'
     JWT_SECRET = 'secret_key_test'
 

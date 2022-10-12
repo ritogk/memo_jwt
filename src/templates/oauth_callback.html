@@ -7,7 +7,6 @@
 
 <script >
   // localhost or ipだと何故かクッキー送信できないのでhostでフォワーディングする事
-  serverOrigin = "https://df6e-2400-2200-622-b4b8-41f2-2585-d918-4047.jp.ngrok.io/"
 
   const code = getParam("code", window.location.href)
   if(code){
@@ -27,9 +26,9 @@
     switch (oauth_provider){
       case 'twitter':
         if(oauth_mode == 'login'){
-          url = serverOrigin + "users/oauth/twitter/login"
+          url = "/users/oauth/twitter/login"
         }else{
-          url = serverOrigin + "users/oauth/twitter"
+          url = "/users/oauth/twitter"
         }
         fetch(url, param)
         .then((res)=>{
@@ -37,14 +36,14 @@
         })
         .then((data)=>{
           console.log('owata');
-          window.location.href = serverOrigin + ""
+          window.location.href = "/"
         });
           break;
       case 'google':
         if(oauth_mode == 'login'){
-          url = serverOrigin + "users/oauth/google/login"
+          url = "/users/oauth/google/login"
         }else{
-          url = serverOrigin + "users/oauth/google"
+          url = "/users/oauth/google"
         }
         fetch(url, param)
         .then((res)=>{
@@ -52,7 +51,7 @@
         })
         .then((data)=>{
           console.log('owata');
-          window.location.href = serverOrigin + ""
+          window.location.href = "/"
         });
         break;
     }
