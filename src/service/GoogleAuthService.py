@@ -21,9 +21,6 @@ class GoogleAuthService:
         self.GOOGLE_CLIENT_ID = config.GOOGLE_CLIENT_ID
         self.GOOGLE_CLIENT_SECRET = config.GOOGLE_CLIENT_SECRET
         self.REDIRECT_URI = config.SERVER_BASE_URL + '/oauth/callback'
-        print(config.GOOGLE_CLIENT_ID)
-        print(config.DEBUG)
-        print(config.GOOGLE_CLIENT_SECRET)
 
     def get_authorization_url(self) -> str:
         # ここでGoogle認証画面に遷移するためのURLを取得する
@@ -40,26 +37,27 @@ class GoogleAuthService:
             access_type="offline",
             prompt="consent",
         )
-        print(redirect_url)
         return redirect_url
 
     def fetch_token(self, code: str) -> Tuple[str, str]:
+        print('st_fetch_token')
         # Googleからリダイレクトして来たときにURLに付与されている code を使って token を取得する
         token = self._client().fetch_token(
             self.TOKEN_URL,
             client_secret=self.GOOGLE_CLIENT_SECRET,
             code=code,
         )
+        print('end_fetch_token')
         print(token)
         return token["access_token"], token["refresh_token"],
 
     def get_user_info(self, access_token: str) -> Optional[dict]:
+        print('st_get_user_info')
         # access_token を使って、ユーザ情報を取得する
         endpoint_url = f"{self.USER_INFO_URL}?access_token={access_token}"
         print(endpoint_url)
         response = requests.get(endpoint_url)
-        print(response)
-
+        print('end_get_user_info')
         if response.status_code == 200:
             return response.json()
 

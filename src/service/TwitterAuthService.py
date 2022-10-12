@@ -1,9 +1,12 @@
+from distutils.command.config import config
 import os
 import requests
 from typing import Optional
 from requests_oauthlib import OAuth2Session
 from requests.auth import AuthBase, HTTPBasicAuth
 from typing import Tuple
+
+from Config import Config
 
 
 class TwitterAuthService:
@@ -19,21 +22,12 @@ class TwitterAuthService:
     CODE_VERIFIER = "dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk"
 
     def __init__(self) -> None:
-        pass
-        # self.TWITTER_CLIENT_ID = DevelopmentConfig.TWITTER_CLIENT_ID
-        # self.TWITTER_CLIENT_SECRET = DevelopmentConfig.TWITTER_CLIENT_SECRET
-        # self.REDIRECT_URI = DevelopmentConfig.SERVER_BASE_URL + '/oauth/callback'
+        config = Config.getInstance()
+        self.TWITTER_CLIENT_ID = config.TWITTER_CLIENT_ID
+        self.TWITTER_CLIENT_SECRET = config.TWITTER_CLIENT_SECRET
+        self.REDIRECT_URI = config.SERVER_BASE_URL + '/oauth/callback'
 
     def get_authorization_url(self) -> str:
-        # ここでGoogle認証画面に遷移するためのURLを取得する
-        # OAuthにない任意のパラメータをもたせたい場合は、 state を使うとよい
-        # ex)
-        #   # name を渡したい場合
-        #   exp = int(datetime.utcnow().timestamp()) + 30
-        #   encoded = jwt.encode({"exp": exp, "name": "hoge"}, "secrets", algorithm="HS256")
-        #   state = encoded.decode("utf-8")
-        #   redirect_url, _ = self._client().authorization_url(self.OAUTH_URL, state=state)
-
         redirect_url, _ = self._client().authorization_url(
             self.OAUTH_URL,
             code_challenge=self.CODE_CHALLENGE,

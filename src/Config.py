@@ -3,22 +3,23 @@ import os
 
 class Config():
     __instance = None
-    DEBUG = True
-    DATABASE_FILE = os.path.join(os.path.abspath(
-        os.path.dirname(__file__)), './db/test.db')
-    # SQLAlchemy
-    SQLALCHEMY_DATABASE_URI = 'sqlite:///' + DATABASE_FILE
+    # db
+    DATABASE_FILE = ''
+    SQLALCHEMY_DATABASE_URI = ''
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_ECHO = False
     TEMPLATES_AUTO_RELOAD = True
+    # server 情報
     SERVER_BASE_URL = ''
     SERVER_DOMAIN = ''
+    # passwordのハッシュ化用のソルト
     USER_PASSWORD_SALT = ''
+    # jwtの改ざんチェック用の鍵
     JWT_SECRET = ''
-
+    # oauth2 twitter
     TWITTER_CLIENT_ID = ""
     TWITTER_CLIENT_SECRET = ""
-
+    # oauth2 google
     GOOGLE_CLIENT_ID = ""
     GOOGLE_CLIENT_SECRET = ""
 
