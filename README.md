@@ -1,10 +1,11 @@
 # パスワード認証とソーシャル認証をミックスしたサンプルコード
 
 ### 初期設定
-```
+```sh
 cd src
 ./e_migrate_deploy.sh
-cp .env.base .env # 環境変数を書き換える
+cp .env.base .env
+vim .env # .envを環境に合わせて書き換える
 ./e_app.sh
 ```
 ## 画面
