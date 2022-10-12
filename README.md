@@ -4,6 +4,7 @@
 ```
 cd src
 ./e_migrate_deploy.sh
+cp .env.base .env # 環境変数を書き換える
 ./e_app.sh
 ```
 ## 画面
